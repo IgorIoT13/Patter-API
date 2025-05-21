@@ -13,32 +13,24 @@ class BrockerDao:
     @staticmethod
     def update_data(
         broker_server_id: int,
-        ip: str = None,
-        port: int = None,
-        username: str = None,
-        password: str = None
+        id_device: int = None,
+        id_user: int = None
     ) -> Brocker:
         broker_server = BrockerDao.get_by_id(broker_server_id)
         
-        if ip is not None:
-            broker_server.ip = ip
-        if port is not None:
-            broker_server.port = port
-        if username is not None:
-            broker_server.username = username
-        if password is not None:
-            broker_server.password = password
-        
+        if id_device is not None:
+            broker_server.id_device = id_device
+        if id_user is not None:
+            broker_server.id_user = id_user
+            
         db.session.commit()
         return broker_server
     
     @staticmethod
-    def create(ip: str, port: int, username: str, password: str) -> Brocker:
+    def create(id_device: int = None, id_user: int = None) -> Brocker:
         broker_server = Brocker(
-            ip=ip,
-            port=port,
-            username=username,
-            password=password
+            id_device=id_device,
+            id_user=id_user
         )
         db.session.add(broker_server)
         db.session.commit()
