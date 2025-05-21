@@ -21,7 +21,7 @@ class LocationDao:
 
     @staticmethod
     def update_data(location_id: int, room: str, adress: str) -> Location:
-        location = LocationDAO.get_location_by_id(location_id)
+        location = LocationDao.get_location_by_id(location_id)
         if room is not None or "" or " ":     
             location.room = room
         if adress is not None or "" or " ":
@@ -38,7 +38,7 @@ class LocationDao:
 
     @staticmethod
     def delete(location_id: int) -> bool:
-        location = LocationDAO.get_location_by_id(location_id)
+        location = LocationDao.get_location_by_id(location_id)
         db.session.delete(location)
         db.session.commit()
         return True
