@@ -1,7 +1,5 @@
 from app import db
 
-
-
 class Brocker(db.Model):
     __tablename__ = 'brokers'
 
