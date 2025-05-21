@@ -1,4 +1,5 @@
 from app import create_app, db
+from app.dao import UserDao, DeviceDataDao, BrockerDao
 
 app = create_app()
 

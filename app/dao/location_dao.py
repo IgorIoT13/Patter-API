@@ -1,7 +1,7 @@
 from app import db
 from app.models import Location
 
-class LocationDAO:
+class LocationDao:
     
     @staticmethod
     def get_all() -> list:
