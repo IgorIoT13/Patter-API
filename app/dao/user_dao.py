@@ -15,7 +15,7 @@ class UserDao:
         return User.query.filter_by(username=username).first()
     
     @staticmethod
-    def update_data(
+    def update(
         user_id: int,
         username: str = None,
         password: str = None,

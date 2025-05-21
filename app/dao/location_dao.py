@@ -13,14 +13,14 @@ class LocationDao:
         return location
 
     @staticmethod
-    def add(room: str, adress: str) -> Location:
+    def create(room: str, adress: str) -> Location:
         new_location = Location(room=room, adress=adress)
         db.session.add(new_location)
         db.session.commit()
         return new_location
 
     @staticmethod
-    def update_data(location_id: int, room: str, adress: str) -> Location:
+    def update(location_id: int, room: str, adress: str) -> Location:
         location = LocationDao.get_location_by_id(location_id)
         if room is not None or "" or " ":     
             location.room = room

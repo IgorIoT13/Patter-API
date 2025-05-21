@@ -3,15 +3,15 @@ from app.models import Device, DeviceData, Location
 
 class DeviceDao:
     @staticmethod
-    def get_device_by_id(device_id: int) -> Device: 
+    def get_by_id(device_id: int) -> Device: 
         return db.session.query(Device).filter(Device.id == device_id).first()
 
     @staticmethod
-    def get_all_devices():
+    def get_all():
         return db.session.query(Device).all()
     
     @staticmethod
-    def add_device(
+    def create(
         name: str,
         type: str,
         topic: str,
@@ -31,7 +31,7 @@ class DeviceDao:
         return device
     
     @staticmethod
-    def update_device(
+    def update(
         device_id: int,
         name: str,
         type: str,
@@ -56,7 +56,7 @@ class DeviceDao:
         return device
     
     @staticmethod
-    def delete_device(device_id):
+    def delete(device_id):
         device = db.session.query(Device).filter(Device.id == device_id).first()
         if device:
             db.session.delete(device)

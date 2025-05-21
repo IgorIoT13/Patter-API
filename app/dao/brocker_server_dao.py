@@ -24,7 +24,7 @@ class BrockerDao:
         return broker_server
              
     @staticmethod
-    def update_data(
+    def update(
         broker_server_id: int,
         id_device: int = None,
         id_user: int = None

@@ -14,7 +14,7 @@ class DeviceDataDao:
         return DeviceData.query.get(device_data_id)
     
     @staticmethod
-    def update_data(
+    def update(
         device_data_id: int,
         secure_status: Optional[bool] = None, 
         temprature: Optional[float] = None, 
