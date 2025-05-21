@@ -4,47 +4,53 @@ from app.models import Location
 class LocationDAO:
     
     @staticmethod
-    def get_all():
+    def get_all() -> list:
         return Location.query.all()
 
     @staticmethod
-    def get_by_id(location_id):
+    def get_by_id(location_id: int) -> Location:
         location = Location.query.get(location_id)
+        
         if location is None:
             raise ValueError("Location not found")
+        
         return location
 
     @staticmethod
-    def add(room, adress):
-        if room is None or adress is None:
-            raise ValueError("Room and address cannot be None")
+    def add(room: str, adress: str) -> Location:
+        if room is None or "" or " " or adress is None or "" or " " :
+            raise ValueError("Room and address cannot be None or empty")
+          
         new_location = Location(room=room, adress=adress)
         db.session.add(new_location)
         db.session.commit()
         return new_location
 
     @staticmethod
-    def update_data(location_id, room, adress):
+    def update_data(location_id: int, room: str, adress: str) -> Location:
+        if room is None or "" or " " and adress is None or "" or " " :
+            raise ValueError("Room and address cannot be None or empty")
+        
         location = LocationDAO.get_location_by_id(location_id)
+        
         if location is None:
             raise ValueError("Location not found")
-        if room is None or adress is None:
-            raise ValueError("Room and address cannot be None")
-        if location:
+
+        if room is not None or "" or " ":     
             location.room = room
+        if adress is not None or "" or " ":
             location.adress = adress
-            db.session.commit()
-            return location
-        return None
+            
+        db.session.commit()
+        return location
 
     @staticmethod
-    def delete(location_id):
-        """Delete a location from the database."""
+    def delete(location_id: int) -> bool:
         location = LocationDAO.get_location_by_id(location_id)
+        
         if location is None:
             raise ValueError("Location not found")
-        if location:
-            db.session.delete(location)
-            db.session.commit()
-            return True
-        return False
+        
+        db.session.delete(location)
+        db.session.commit()
+        return True
