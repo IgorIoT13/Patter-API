@@ -5,17 +5,17 @@ from datetime import datetime
 class DeviceDataDao:
     
     @staticmethod
-    def get_all_device_data() -> list:
+    def get_all() -> list:
         return DeviceData.query.all()
     
     @staticmethod
-    def get_device_data_by_id(device_data_id) -> DeviceData:
+    def get_by_id(device_data_id) -> DeviceData:
         if device_data_id is None:
             raise ValueError("device_data_id cannot be None")
         return DeviceData.query.get(device_data_id)
     
     @staticmethod
-    def edit(device_data_id, secure_status = False, temprature = 0, humidity = 0) -> DeviceData:
+    def update_data(device_data_id, secure_status = False, temprature = 0, humidity = 0) -> DeviceData:
         data = DeviceDataDao.get_device_data_by_id(device_data_id)
         if data is None:
             raise ValueError("DeviceData not found")
