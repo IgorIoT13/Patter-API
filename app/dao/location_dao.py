@@ -43,6 +43,15 @@ class LocationDAO:
             
         db.session.commit()
         return location
+    
+    @staticmethod
+    def get_by_property(room: str, adress: str) -> Location:
+        if room is None or "" or " " or adress is None or "" or " " :
+            raise ValueError("Room and address cannot be None or empty")
+        
+        location = Location.query.filter_by(room=room, adress=adress).first()
+        return location
+        
 
     @staticmethod
     def delete(location_id: int) -> bool:
