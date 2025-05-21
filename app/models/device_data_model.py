@@ -6,8 +6,8 @@ class DeviceData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     # ---------------------------------------
     secure_status = db.Column(db.Boolean, nullable=False, default=False)
-    temprature = db.Column(db.Float, nullable=False)
-    humidity = db.Column(db.Float, nullable=False)
+    temprature = db.Column(db.Float, nullable=True)
+    humidity = db.Column(db.Float, nullable=True)
     time = db.Column(db.DateTime, nullable=False)
 
     def __repr__(self):
