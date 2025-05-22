@@ -1,5 +1,5 @@
 from app import create_app, db
-from tests import Data, DeviceDataTest, DeviceTest, LocationTest, UserTest
+from tests import Data, DeviceDataTest, DeviceTest, LocationTest, UserTest, BrockerTest
 from app.dao import DeviceDataDao
 
 app = create_app()
@@ -14,6 +14,9 @@ def test_device_part_dao():
         DeviceTest.tests()
         LocationTest.tests()
         UserTest.tests()
+        BrockerTest.tests()
+        UserTest.delete_test()
+        
         
         
 if __name__ == '__main__':
