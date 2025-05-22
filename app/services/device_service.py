@@ -25,7 +25,13 @@ class DeviceService:
         return DeviceDao.create(name, type, topic, location_id)
 
     @staticmethod
-    def update(device_id: int, name: str = None, type: str = None, topic: str = None) -> None:
+    def update(
+        device_id: int,
+        name: str = None,
+        type: str = None,
+        topic: str = None,
+        location_id: int = None
+    ) -> None:
         if device_id is None:
             raise ValueError("Device ID cannot be None")
         if device_id <= 0:
@@ -43,20 +49,21 @@ class DeviceService:
         if DeviceService.get_by_property(name, type, topic):
             raise ValueError("Device already exists")
         
+        ready_name, ready_type = device.name, device.type
+        ready_topic, ready_location_id = device.topic, device.location_id
+        
+        if name is not None:
+            ready_name = name
+        if type is not None:
+            ready_type = type
+        if topic is not None:
+            ready_topic = topic
+        if location_id is not None:
+            ready_location_id = location_id
+            
         if name is not None and type is not None and topic is not None:
-            DeviceDao.update(device_id, name, type, topic)
-        elif name is not None and type is not None:
-            DeviceDao.update(device_id, name, type, device.topic)
-        elif name is not None and topic is not None:
-            DeviceDao.update(device_id, name, device.type, topic)   
-        elif type is not None and topic is not None:
-            DeviceDao.update(device_id, device.name, type, topic)
-        elif name is not None:
-            DeviceDao.update(device_id, name, device.type, device.topic)
-        elif type is not None:
-            DeviceDao.update(device_id, device.name, type, device.topic)
-        elif topic is not None:
-            DeviceDao.update(device_id, device.name, device.type, topic)
+            DeviceDao.update(device_id, ready_name, ready_type, ready_topic, ready_location_id)
+
             
     @staticmethod
     def delete(device_id: int, device: Device = None) -> None:
