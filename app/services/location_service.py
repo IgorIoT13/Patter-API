@@ -16,6 +16,30 @@ class LocationService:
     def get_by_property(room: str = None, adress: str = None) -> Location:
         location = LocationDao.get_by_property(room, adress)
         return location
+    
+    @staticmethod
+    def update(location_id: int, room: str = None, adress: str = None) -> Location:
+        if location_id is None:
+            raise ValueError("Location ID cannot be None")
+        if location_id <= 0:
+            raise ValueError("Location ID must be a positive integer")
+        
+        location = LocationDao.get_by_id(location_id)
+        
+        if location is None:
+            raise ValueError("Location not found")
+        if room == location.room and adress == location.adress:
+            raise ValueError("No changes detected")
+        if room is None and adress is None:
+            raise ValueError("Room and address cannot be None")
+        if room == "" or room == " " or adress == "" or adress == " ":
+            raise ValueError("Room and address cannot be empty")
+        if LocationDao.get_by_property(room, adress):
+            raise ValueError("Location already exists")
+        if room is not None and adress is not None:
+            LocationDao.update(location_id, room, adress)
+            
+            
 
     
     @staticmethod
