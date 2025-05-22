@@ -4,145 +4,61 @@ from .data import Data
 
 class DeviceDataTest:
     
-    precondion_data = Data.get_device_data()
-    
     @staticmethod
-    def add_data(id: int, data: dict) -> DeviceData:
+    def create_test() -> DeviceData:
+        data = Data.get_device_data()
+        device = DeviceDataDao.create(
+            device_id=data["to_delete"]["device_id"],
+            secure_status=data["to_delete"]["secure_status"],
+            temprature=data["to_delete"]["temprature"],
+            humidity=data["to_delete"]["humidity"]
+        )
+        assert device.device_id == data["to_delete"]["device_id"]
+        assert device.secure_status == data["to_delete"]["secure_status"]
+        assert device.temprature == data["to_delete"]["temprature"]
+        assert device.humidity == data["to_delete"]["humidity"]
+        assert device.time is not None
         
-        if data["secure_status"] is None and data["temprature"] is None and data["humidity"] is None:
-            device_data = DeviceDataDao.create(id)
-        elif data["secure_status"] is None and data["temprature"] is None:
-            device_data = DeviceDataDao.create(
-                device_id=id,
-                humidity=data["humidity"]
-            )
-        elif data["secure_status"] is None and data["humidity"] is None:
-            device_data = DeviceDataDao.create(
-                device_id=id,
-                temprature=data["temprature"]
-            )
-        elif data["temprature"] is None and data["humidity"] is None:
-            device_data = DeviceDataDao.create(
-                device_id=id,
-                secure_status=data["secure_status"]
-            )
-        elif data["secure_status"] is None:
-            device_data = DeviceDataDao.create(
-                device_id=id,
-                temprature=data["temprature"],
-                humidity=data["humidity"]
-            )
-        elif data["temprature"] is None:
-            device_data = DeviceDataDao.create(
-                device_id=id,
-                secure_status=data["secure_status"],
-                humidity=data["humidity"]
-            )
-        elif data["humidity"] is None:
-            device_data = DeviceDataDao.create(
-                device_id=id,
-                secure_status=data["secure_status"],
-                temprature=data["temprature"]
-            )
-        else:
-            device_data = DeviceDataDao.create(
-                device_id=id,
-                secure_status=data["secure_status"],
-                temprature=data["temprature"],
-                humidity=data["humidity"]
-            )
-        return device_data
-    
-    @staticmethod
-    def create_device() -> Device:
-        location = LocationDao.create(
-            "test",
-            "Test12"
-        )
-        device = DeviceDao.create(
-            name="Test Device",
-            type="Test Type",
-            topic="Test Topic",
-            location_id=location.id
-        )
         return device
     
     @staticmethod
-    def precondition() -> dict:
-        default_device = DeviceDataTest.create_device()
-        result = dict()
-        for key in DeviceDataTest.precondion_data:
-            result[key] = DeviceDataTest.add_data(default_device.id, DeviceDataTest.precondion_data[key])
-        return result
-    
-    @staticmethod
-    def check_created(data: dict) -> None:
-        for key in data:
-            device_data = DeviceDataDao.get_by_id(data[key].id)
-            assert device_data.id != None
-            assert device_data.secure_status == data[key].secure_status
-            assert device_data.temprature == data[key].temprature
-            assert device_data.humidity == data[key].humidity
+    def search_test(device_data: DeviceData) -> None:
+        data = Data.get_device_data()
+        device = DeviceDataDao.get_by_id(device_data.id)
+        assert device.id == device_data.id
+        assert device.device_id == device_data.device_id
+        assert device.secure_status == device_data.secure_status
+        assert device.temprature == device_data.temprature
+        assert device.humidity == device_data.humidity
+        assert device.time == device_data.time
         
     @staticmethod
-    def check_updated(data: dict) -> None:
-        DeviceDataDao.update(
-            data["withOutSecure"].id,
-            secure_status=True,
-            temprature=115,
-            humidity=30
+    def update_test(device_data: DeviceData) -> None:
+        data = Data.get_device_data()
+        device = DeviceDataDao.update(
+            device_data.id,
+            device_id=data["change"]["device_id"],
+            secure_status=data["change"]["secure_status"],
+            temprature=data["change"]["temprature"],
+            humidity=data["change"]["humidity"]
         )
-        test_data = DeviceDataDao.get_by_id(data["withOutSecure"].id)
-        assert test_data.secure_status == True
-        assert test_data.temprature == 115
-        assert test_data.humidity == 30
+        assert device.id == device_data.id
+        assert device.device_id == data["change"]["device_id"]
+        assert device.secure_status == data["change"]["secure_status"]
+        assert device.temprature == data["change"]["temprature"]
+        assert device.humidity == data["change"]["humidity"]
         
-        DeviceDataDao.update(
-            data["withOutTemperature"].id,
-            secure_status=False,
-            temprature=20,
-            humidity=30
-        )
-        
-        test_data = DeviceDataDao.get_by_id(data["withOutTemperature"].id)
-        assert test_data.secure_status == False
-        assert test_data.temprature == 20
-        assert test_data.humidity == 30
+    @staticmethod
+    def delete_test(device_data: DeviceData) -> None:
+        DeviceDataDao.delete(device_data.id)
+        device = DeviceDataDao.get_by_id(device_data.id)
+        assert device is None
     
     @staticmethod
-    def check_deleted(deleted: dict, clear_all: bool = False) -> None:
-        if clear_all:
-            DeviceDataTest.clear(deleted)
-            for key in deleted:
-                device_data = DeviceDataDao.get_by_id(deleted[key].id)
-                assert device_data == None
-        else:
-            data = DeviceDataTest.add_data(1, {
-                "secure_status": False,
-                "temprature": 1,
-                "humidity": 2
-            })
-            other = DeviceDataDao.get_by_id(data.id)
-            assert other != None
-            assert other.id == data.id
-            assert other.secure_status == data.secure_status
-            assert other.temprature == data.temprature
-            assert other.humidity == data.humidity
-            assert other.time == data.time
-            
-            DeviceDataDao.delete(data.id)
-            other = DeviceDataDao.get_by_id(data.id)
-            assert other == None
-            
+    def tests():
+        obj = DeviceDataTest.create_test()
+        assert obj is not None
+        DeviceDataTest.search_test(obj)
+        DeviceDataTest.update_test(obj)
+        DeviceDataTest.delete_test(obj)
         
-    @staticmethod
-    def clear(to_delete: dict) -> None:
-        for key in to_delete:
-            DeviceDataDao.delete(to_delete[key].id)
-    
-    @staticmethod
-    def tests(clear:bool = True) -> None:
-        data = DeviceDataTest.precondition()
-        DeviceDataTest.check_created(data)
-        DeviceDataTest.check_updated(data)
-        DeviceDataTest.check_deleted(data, clear)
