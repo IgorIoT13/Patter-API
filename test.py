@@ -12,7 +12,7 @@ def test_device_part_dao():
     with app.app_context():
         DeviceDataTest.tests()
         DeviceTest.tests()
-        # LocationTest.tests()
+        LocationTest.tests()
         
         
 if __name__ == '__main__':

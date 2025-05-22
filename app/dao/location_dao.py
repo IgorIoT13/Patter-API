@@ -38,7 +38,7 @@ class LocationDao:
 
     @staticmethod
     def delete(location_id: int) -> bool:
-        location = LocationDao.get_location_by_id(location_id)
+        location = LocationDao.get_by_id(location_id)
         db.session.delete(location)
         db.session.commit()
         return True
