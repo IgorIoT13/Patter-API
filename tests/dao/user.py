@@ -46,7 +46,7 @@ class UserTest:
     def delete_test(user: User) -> None:
         deleted_user = UserDao.delete(user.id)
         result = UserDao.get_by_id(user.id)
-        assert result is not None
+        assert result is None
         
     
     @staticmethod

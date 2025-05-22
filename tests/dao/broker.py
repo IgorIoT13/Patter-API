@@ -40,7 +40,7 @@ class BrockerTest:
     def delete_test(broker: Brocker) -> None:
         deleted_broker = BrockerDao.delete(broker.id)
         result = BrockerDao.get_by_id(broker.id)
-        assert result is not None
+        assert result is None
     
     @staticmethod
     def tests():
