@@ -16,11 +16,14 @@ class DeviceDataDao:
     @staticmethod
     def update(
         device_data_id: int,
+        device_id: Optional[int] = None,
         secure_status: Optional[bool] = None, 
         temprature: Optional[float] = None, 
         humidity: Optional[float] = None 
     ) -> DeviceData:
         data = DeviceDataDao.get_by_id(device_data_id)
+        if device_id is not None:
+            data.device_id = device_id
         if secure_status is not None:
             data.secure_status = secure_status
         if temprature is not None:
@@ -33,8 +36,14 @@ class DeviceDataDao:
         return data
     
     @staticmethod
-    def create(secure_status: bool = False, temprature: float = 0, humidity: float = 0) -> DeviceData:
+    def create(
+        device_id: int,
+        secure_status: bool = False,
+        temprature: float = 0,
+        humidity: float = 0
+    ) -> DeviceData:
         data = DeviceData(
+            device_id=device_id,
             secure_status=secure_status,
             temprature=temprature,
             humidity=humidity,
@@ -46,7 +55,8 @@ class DeviceDataDao:
     
     @staticmethod
     def delete(data_id: int) -> None:
-        data = DeviceDataDao.get_device_data_by_id(data_id)
+        data = DeviceDataDao.get_by_id(data_id)
+        print(data.id)
         db.session.delete(data)
         db.session.commit()
     

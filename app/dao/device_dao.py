@@ -15,7 +15,6 @@ class DeviceDao:
         name: str,
         type: str,
         topic: str,
-        data_id: int,
         location_id: int
         ) -> Device:
         
@@ -23,7 +22,6 @@ class DeviceDao:
             name=name,
             type=type,
             topic=topic,
-            data_id=data_id,
             location_id=location_id
         )
         db.session.add(device)
@@ -36,7 +34,6 @@ class DeviceDao:
         name: str,
         type: str,
         topic: str,
-        data_id: int,
         location_id: int
         ) -> Device:
         device = DeviceDao.get_by_id(device_id)
@@ -47,8 +44,6 @@ class DeviceDao:
             device.type = type
         if topic is not None and topic != "":
             device.topic = topic
-        if data_id is not None and data_id != "":
-            device.data_id = data_id
         if location_id is not None and location_id != "":
             device.location_id = location_id
         db.session.commit()
