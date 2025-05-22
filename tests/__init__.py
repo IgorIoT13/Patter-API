@@ -1,2 +1,2 @@
 from .dao import DeviceDataTest
-from .dao.data import Data
+from .dao import Data

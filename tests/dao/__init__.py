@@ -1,1 +1,2 @@
-from .device_data_precondition import DeviceDataTest
+from .device_data import DeviceDataTest
+from .data import Data
