@@ -66,8 +66,12 @@ class LocationService:
         if location is None:
             raise ValueError("Location not found")
         
+        devices = DeviceService.get_by_location(location_id)
+        if len(devices) > 0:
+            for device in devices:
+                DeviceService.delete(device.id)
         LocationDao.delete(location_id)
-        #TREBA DO PISATI VIDALENIA DEVICE
+        
         
         
         
