@@ -1,79 +1,52 @@
 from app.dao import DeviceDataDao
 from app.models import DeviceData
+from .data import Data
 
 class DeviceDataTest:
     
-    precondion_data = {
-        "withOutSecure": {
-            "secure_status": None,
-            "temprature": 100,
-            "humidity": 11
-        },
-        "withOutTemperature": {
-            "secure_status": True,
-            "temprature": None,
-            "humidity": 11
-        },
-        "withOutHumidity": {
-            "secure_status": True,
-            "temprature": 100,
-            "humidity": None
-        },
-        "withOutTemperatureAndHumidity": {
-            "secure_status": True,
-            "temprature": None,
-            "humidity": None
-        },
-        "withOutSecureAndHumidity": {
-            "secure_status": None,
-            "temprature": 100,
-            "humidity": None
-        },
-        "withOutSecureAndTemperature": {
-            "secure_status": None,
-            "temprature": None,
-            "humidity": 11
-        },
-        "withOutAll": {
-            "secure_status": None,
-            "temprature": None,
-            "humidity": None
-        }
-    }
+    precondion_data = Data.get_device_data()
     
     @staticmethod
     def add_data(data: dict) -> DeviceData:
+        
         if data["secure_status"] is None and data["temprature"] is None and data["humidity"] is None:
-            device_data = DeviceDataDao.create()
+            device_data = DeviceDataDao.create(device_id=data["device_id"])
         elif data["secure_status"] is None and data["temprature"] is None:
             device_data = DeviceDataDao.create(
+                device_id=data["device_id"],
                 humidity=data["humidity"]
             )
         elif data["secure_status"] is None and data["humidity"] is None:
             device_data = DeviceDataDao.create(
+                device_id=data["device_id"],
                 temprature=data["temprature"]
             )
         elif data["temprature"] is None and data["humidity"] is None:
             device_data = DeviceDataDao.create(
+                device_id=data["device_id"],
                 secure_status=data["secure_status"]
             )
         elif data["secure_status"] is None:
             device_data = DeviceDataDao.create(
+                device_id=data["device_id"],
                 temprature=data["temprature"],
                 humidity=data["humidity"]
             )
         elif data["temprature"] is None:
             device_data = DeviceDataDao.create(
+                device_id=data["device_id"],
                 secure_status=data["secure_status"],
                 humidity=data["humidity"]
             )
         elif data["humidity"] is None:
             device_data = DeviceDataDao.create(
+                device_id=data["device_id"],
                 secure_status=data["secure_status"],
                 temprature=data["temprature"]
             )
         else:
             device_data = DeviceDataDao.create(
+                device_id=data["device_id"],
                 secure_status=data["secure_status"],
                 temprature=data["temprature"],
                 humidity=data["humidity"]
