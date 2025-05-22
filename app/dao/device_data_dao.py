@@ -56,7 +56,6 @@ class DeviceDataDao:
     @staticmethod
     def delete(data_id: int) -> None:
         data = DeviceDataDao.get_by_id(data_id)
-        print(data.id)
         db.session.delete(data)
         db.session.commit()
     
