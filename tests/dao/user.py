@@ -14,6 +14,8 @@ class UserTest:
         assert user.username == Data.user["to_delete"]["username"]
         assert user.password == Data.user["to_delete"]["password"]
         assert user.number == Data.user["to_delete"]["number"]
+        
+        Data.broker["to_delete"]["user_id"] = user.id
         return user
     
     @staticmethod
