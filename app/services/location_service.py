@@ -18,7 +18,7 @@ class LocationService:
         return location
     
     @staticmethod
-    def update(location_id: int, room: str = None, adress: str = None) -> Location:
+    def update(location_id: int, room: str = None, adress: str = None) -> None:
         if location_id is None:
             raise ValueError("Location ID cannot be None")
         if location_id <= 0:
@@ -38,6 +38,10 @@ class LocationService:
             raise ValueError("Location already exists")
         if room is not None and adress is not None:
             LocationDao.update(location_id, room, adress)
+        elif room is not None:
+            LocationDao.update(location_id, room, location.adress)
+        elif adress is not None:
+            LocationDao.update(location_id, location.room, adress)
             
             
 
