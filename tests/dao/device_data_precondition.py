@@ -84,7 +84,6 @@ class DeviceDataTest:
             assert device_data.temprature == data[key].temprature
             assert device_data.humidity == data[key].humidity
         
-    
     @staticmethod
     def check_updated(data: dict) -> None:
         DeviceDataDao.update(
@@ -111,11 +110,30 @@ class DeviceDataTest:
         assert test_data.humidity == 30
     
     @staticmethod
-    def check_deleted(deleted: dict) -> None:
-        DeviceDataTest.clear(deleted)
-        for key in deleted:
-            device_data = DeviceDataDao.get_by_id(deleted[key].id)
-            assert device_data == None
+    def check_deleted(deleted: dict, clear_all: bool = False) -> None:
+        if clear_all:
+            DeviceDataTest.clear(deleted)
+            for key in deleted:
+                device_data = DeviceDataDao.get_by_id(deleted[key].id)
+                assert device_data == None
+        else:
+            data = DeviceDataTest.add_data(1, {
+                "secure_status": False,
+                "temprature": 1,
+                "humidity": 2
+            })
+            other = DeviceDataDao.get_by_id(data.id)
+            assert other != None
+            assert other.id == data.id
+            assert other.secure_status == data.secure_status
+            assert other.temprature == data.temprature
+            assert other.humidity == data.humidity
+            assert other.time == data.time
+            
+            DeviceDataDao.delete(data.id)
+            other = DeviceDataDao.get_by_id(data.id)
+            assert other == None
+            
         
     @staticmethod
     def clear(to_delete: dict) -> None:
@@ -127,5 +145,4 @@ class DeviceDataTest:
         data = DeviceDataTest.precondition()
         DeviceDataTest.check_created(data)
         DeviceDataTest.check_updated(data)
-        if clear:
-            DeviceDataTest.check_deleted(data)
+        DeviceDataTest.check_deleted(data, clear)

@@ -6,7 +6,7 @@ app = create_app()
 
 def test_device_data_dao():
     with app.app_context():
-        DeviceDataTest.tests()
+        DeviceDataTest.tests(False)
         
 if __name__ == '__main__':
     test_device_data_dao()
