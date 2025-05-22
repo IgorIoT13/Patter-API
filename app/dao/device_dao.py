@@ -11,6 +11,17 @@ class DeviceDao:
         return db.session.query(Device).all()
     
     @staticmethod
+    def get_by_property(name: str = None, type: str = None, topic: str = None) -> Device:
+        query = db.session.query(Device)
+        if name is not None:
+            query = query.filter(Device.name == name)
+        if type is not None:
+            query = query.filter(Device.type == type)
+        if topic is not None:
+            query = query.filter(Device.topic == topic)
+        return query.first()
+    
+    @staticmethod
     def create(
         name: str,
         type: str,
