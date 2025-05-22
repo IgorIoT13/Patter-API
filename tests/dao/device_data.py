@@ -1,5 +1,5 @@
-from app.dao import DeviceDataDao, DeviceDao, LocationDao
-from app.models import DeviceData, Device, Location
+from app.dao import DeviceDataDao
+from app.models import DeviceData
 from .data import Data
 
 class DeviceDataTest:
