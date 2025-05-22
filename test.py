@@ -15,9 +15,7 @@ def test_device_part_dao():
         LocationTest.tests()
         UserTest.tests()
         BrockerTest.tests()
-        UserTest.delete_test()
-        
-        
+        UserTest.delete_test(id = Data.get_broker()["to_delete"]["user_id"])
         
 if __name__ == '__main__':
     prepare_test_environment()

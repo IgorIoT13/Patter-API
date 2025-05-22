@@ -43,10 +43,18 @@ class UserTest:
         assert updated_user.number == Data.user["change"]["number"]
     
     @staticmethod
-    def delete_test(user: User) -> None:
-        deleted_user = UserDao.delete(user.id)
-        result = UserDao.get_by_id(user.id)
-        assert result is None
+    def delete_test(user: User = None, id: int = -1) -> None:
+        if user is not None:
+            deleted_user = UserDao.delete(user.id)
+            result = UserDao.get_by_id(user.id)
+            assert result is None
+        else:
+            assert id != -1
+            assert id > 0
+            deleted_user = UserDao.delete(id)
+            result = UserDao.get_by_id(id)
+            assert result is None
+        
         
     
     @staticmethod
