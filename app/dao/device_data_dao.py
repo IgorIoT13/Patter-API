@@ -20,7 +20,7 @@ class DeviceDataDao:
         temprature: Optional[float] = None, 
         humidity: Optional[float] = None 
     ) -> DeviceData:
-        data = DeviceDataDao.get_device_data_by_id(device_data_id)
+        data = DeviceDataDao.get_by_id(device_data_id)
         if secure_status is not None:
             data.secure_status = secure_status
         if temprature is not None:

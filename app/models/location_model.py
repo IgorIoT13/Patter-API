@@ -5,7 +5,7 @@ class Location(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     # ---------------------------------------
-    room = db.Column(db.String(80), unique=True, nullable=False)
+    room = db.Column(db.String(80), nullable=False)
     adress = db.Column(db.String(80), nullable=False)
 
     def __repr__(self):

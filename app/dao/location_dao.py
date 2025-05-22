@@ -21,7 +21,7 @@ class LocationDao:
 
     @staticmethod
     def update(location_id: int, room: str, adress: str) -> Location:
-        location = LocationDao.get_location_by_id(location_id)
+        location = LocationDao.get_by_id(location_id)
         if room is not None or "" or " ":     
             location.room = room
         if adress is not None or "" or " ":

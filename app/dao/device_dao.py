@@ -39,7 +39,7 @@ class DeviceDao:
         data_id: int,
         location_id: int
         ) -> Device:
-        device = db.session.query(Device).filter(Device.id == device_id).first()
+        device = DeviceDao.get_by_id(device_id)
         
         if name is not None and name != "":
             device.name = name
