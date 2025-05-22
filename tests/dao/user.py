@@ -18,7 +18,7 @@ class UserTest:
     
     @staticmethod
     def search_test(user: User) -> None:
-        data = UserDao.search(user.id)
+        data = UserDao.get_by_id(user.id)
         assert data is not None
         assert data.id == user.id
         assert data.username == user.username
