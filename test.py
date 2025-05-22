@@ -6,7 +6,7 @@ app = create_app()
 
 def prepare_test_environment():
     with app.app_context():
-        Data.create_base_device_structure()
+        Data.create_data_base()
 
 def test_device_part_dao():
     with app.app_context():

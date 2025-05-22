@@ -1,5 +1,5 @@
-from app.dao import DeviceDataDao, DeviceDao, LocationDao
-from app.models import DeviceData, Device, Location
+from app.dao import DeviceDataDao, DeviceDao, LocationDao, UserDao, BrockerDao
+from app.models import DeviceData, Device, Location, User, Brocker
 
 class Data:
     device_data = {
@@ -62,6 +62,38 @@ class Data:
         }
     }
     
+    broker = {
+        "common": {
+            "device_id": 1,
+            "user_id": 1
+        },
+        "to_delete": {
+            "device_id": 1,
+            "user_id": 1
+        },
+        "change": {
+            "device_id": 1,
+            "user_id": 1
+        }
+    }
+    user = {
+        "common": {
+            "username": "test_user",
+            "password": "test_password",
+            "number": "380955512543"
+        },
+        "to_delete": {
+            "username": "test_user_to_delete",
+            "password": "test_password_to_delete",
+            "number": "380955512523"
+        },
+        "change": {
+            "username": "test_user_change",
+            "password": "test_password_change",
+            "number": "380952312111"
+        }
+    }
+    
     @staticmethod
     def get_device_data() -> dict:
        return Data.device_data
@@ -96,6 +128,8 @@ class Data:
         Data.device_data["common"]["device_id"] = device.id
         Data.device_data["change"]["device_id"] = device.id
         Data.device_data["to_delete"]["device_id"] = device.id
+        Data.broker["common"]["device_id"] = device.id
+        Data.broker["change"]["device_id"] = device.id
         return device
     
     @staticmethod
@@ -117,4 +151,41 @@ class Data:
             "location": location,
             "device": device,
             "device_data": device_data
+        }
+        
+    @staticmethod
+    def create_base_user() -> User:
+        user = UserDao.create(
+            username=Data.user["common"]["username"],
+            password=Data.user["common"]["password"],
+            number=Data.user["common"]["number"]
+        )
+        Data.broker["common"]["user_id"] = user.id
+        Data.broker["change"]["user_id"] = user.id
+        return user
+    
+    @staticmethod
+    def create_base_broker() -> Brocker:
+        broker = BrockerDao.create(
+            id_device=Data.broker["common"]["device_id"],
+            id_user=Data.broker["common"]["user_id"]
+        )
+        return broker
+    
+    @staticmethod
+    def create_base_user_broker() -> dict:
+        user = Data.create_base_user()
+        broker = Data.create_base_broker()
+        return {
+            "user": user,
+            "broker": broker
+        }
+        
+    @staticmethod
+    def create_data_base() -> dict:
+        device_structure = Data.create_base_device_structure()
+        user_broker = Data.create_base_user_broker()
+        return {
+            "device_structure": device_structure,
+            "user_broker": user_broker
         }
