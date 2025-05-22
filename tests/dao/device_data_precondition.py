@@ -42,7 +42,7 @@ class DeviceDataTest:
     }
     
     @staticmethod
-    def add_data(self, data: dict) -> DeviceData:
+    def add_data(data: dict) -> DeviceData:
         if data["secure_status"] is None and data["temprature"] is None and data["humidity"] is None:
             device_data = DeviceDataDao.create()
         elif data["secure_status"] is None and data["temprature"] is None:
@@ -135,8 +135,9 @@ class DeviceDataTest:
             DeviceDataDao.delete(to_delete[key].id)
     
     @staticmethod
-    def tests() -> None:
+    def tests(clear:bool = True) -> None:
         data = DeviceDataTest.precondition()
         DeviceDataTest.check_created(data)
         DeviceDataTest.check_updated(data)
-        DeviceDataTest.check_deleted(data)
+        if clear:
+            DeviceDataTest.check_deleted(data)
