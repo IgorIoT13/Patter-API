@@ -105,6 +105,14 @@ class Data:
     @staticmethod
     def get_location() -> dict:
        return Data.location
+    
+    @staticmethod
+    def get_user() -> dict:
+        return Data.user
+    
+    @staticmethod
+    def get_broker() -> dict:
+        return Data.broker
 #----------------------------------------------------------------------------------
     @staticmethod
     def create_base_location() -> Location:
