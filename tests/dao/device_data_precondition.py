@@ -1,5 +1,5 @@
-from app.dao import DeviceDataDao
-from app.models import DeviceData
+from app.dao import DeviceDataDao, DeviceDao, LocationDao
+from app.models import DeviceData, Device, Location
 from .data import Data
 
 class DeviceDataTest:
@@ -7,46 +7,46 @@ class DeviceDataTest:
     precondion_data = Data.get_device_data()
     
     @staticmethod
-    def add_data(data: dict) -> DeviceData:
+    def add_data(id: int, data: dict) -> DeviceData:
         
         if data["secure_status"] is None and data["temprature"] is None and data["humidity"] is None:
-            device_data = DeviceDataDao.create(device_id=data["device_id"])
+            device_data = DeviceDataDao.create(id)
         elif data["secure_status"] is None and data["temprature"] is None:
             device_data = DeviceDataDao.create(
-                device_id=data["device_id"],
+                device_id=id,
                 humidity=data["humidity"]
             )
         elif data["secure_status"] is None and data["humidity"] is None:
             device_data = DeviceDataDao.create(
-                device_id=data["device_id"],
+                device_id=id,
                 temprature=data["temprature"]
             )
         elif data["temprature"] is None and data["humidity"] is None:
             device_data = DeviceDataDao.create(
-                device_id=data["device_id"],
+                device_id=id,
                 secure_status=data["secure_status"]
             )
         elif data["secure_status"] is None:
             device_data = DeviceDataDao.create(
-                device_id=data["device_id"],
+                device_id=id,
                 temprature=data["temprature"],
                 humidity=data["humidity"]
             )
         elif data["temprature"] is None:
             device_data = DeviceDataDao.create(
-                device_id=data["device_id"],
+                device_id=id,
                 secure_status=data["secure_status"],
                 humidity=data["humidity"]
             )
         elif data["humidity"] is None:
             device_data = DeviceDataDao.create(
-                device_id=data["device_id"],
+                device_id=id,
                 secure_status=data["secure_status"],
                 temprature=data["temprature"]
             )
         else:
             device_data = DeviceDataDao.create(
-                device_id=data["device_id"],
+                device_id=id,
                 secure_status=data["secure_status"],
                 temprature=data["temprature"],
                 humidity=data["humidity"]
@@ -54,10 +54,25 @@ class DeviceDataTest:
         return device_data
     
     @staticmethod
+    def create_device() -> Device:
+        location = LocationDao.create(
+            "test",
+            "Test12"
+        )
+        device = DeviceDao.create(
+            name="Test Device",
+            type="Test Type",
+            topic="Test Topic",
+            location_id=location.id
+        )
+        return device
+    
+    @staticmethod
     def precondition() -> dict:
+        default_device = DeviceDataTest.create_device()
         result = dict()
         for key in DeviceDataTest.precondion_data:
-            result[key] = DeviceDataTest.add_data(DeviceDataTest.precondion_data[key])
+            result[key] = DeviceDataTest.add_data(default_device.id, DeviceDataTest.precondion_data[key])
         return result
     
     @staticmethod
