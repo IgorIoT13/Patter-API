@@ -10,7 +10,7 @@ def create_app():
     db.init_app(app)
 
     with app.app_context():
-        from app import models  # імпортуємо моделі
+        from . import models
         db.create_all()  # створюємо таблиці, якщо їх ще нема
 
     return app
