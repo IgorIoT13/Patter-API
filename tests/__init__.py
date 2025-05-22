@@ -1,5 +1,5 @@
-from .dao import DeviceDataTest
-from .dao import DeviceTest
-from .dao import LocationTest
+from .dao import DeviceDataTest, DeviceTest, LocationTest, UserTest
+
+
 
 from .dao import Data
