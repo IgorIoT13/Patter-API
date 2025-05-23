@@ -54,14 +54,16 @@ class DeviceDataService:
         )
         
     @staticmethod
-    def get_by_device_id(device_id: int) -> DeviceData:
+    def get_all_by_device_id(device_id: int) -> list:
         if device_id is None:
             raise ValueError("Device ID cannot be None")
         if device_id <= 0:
             raise ValueError("Device ID must be a positive integer")
         device_data = DeviceDataDao.get_all()
-        device_data = [data for data in device_data if data.device_id == device_id]
-        return device_data
+        if device_data is None:
+            raise ValueError("Device data not found")
+        result = [data for data in device_data if data.device_id == device_id]
+        return result
         
     @staticmethod
     def delete(device_data_id: int) -> None:

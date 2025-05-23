@@ -1,5 +1,6 @@
-from app.dao import DeviceDao
-from app.models import Device
+from app.dao import DeviceDao, DeviceDataDao, DeviceDao
+from app.models import Device, DeviceData, Device
+from .device_data_service import DeviceDataService
 
 class DeviceService:
     @staticmethod
@@ -79,6 +80,11 @@ class DeviceService:
         
         if device is None:
             raise ValueError("Device not found")
+        
+        data = DeviceDataService.get_all_by_device_id(device_id)
+        if data is not None:
+            for d in data:
+                DeviceDataService.delete(d.id)
         
         DeviceDao.delete(device_id)
     
