@@ -1,16 +1,17 @@
 from app.models import Brocker
-from app.dao import BrockerDao
-from . import DeviceService, UserService
+from app.dao import BrockerDao, UserDao, DeviceDao
+# from .user_service import UserService
+# from .device_service import DeviceService
 
 class BrockerService:
     
     @staticmethod
     def create(id_device: int, id_user: int) -> Brocker:
-        device = DeviceService.get_by_id(id_device)
+        device = DeviceDao.get_by_id(id_device)
         if not device:
             raise ValueError(f"Device with id {id_device} does not exist.")
         
-        user = UserService.get_by_id(id_user)
+        user = UserDao.get_by_id(id_user)
         if not user:
             raise ValueError(f"User with id {id_user} does not exist.")
         
@@ -51,10 +52,10 @@ class BrockerService:
         ready_id_device = id_device if id_device is not None else brocker.id_device
         ready_id_user = id_user if id_user is not None else brocker.id_user
         
-        device = DeviceService.get_by_id(ready_id_device)
+        device = DeviceDao.get_by_id(ready_id_device)
         if not device:
             raise ValueError(f"Device with id {ready_id_device} does not exist.")
-        user = UserService.get_by_id(ready_id_user)
+        user = UserDao.get_by_id(ready_id_user)
         if not user:
             raise ValueError(f"User with id {ready_id_user} does not exist.")
         

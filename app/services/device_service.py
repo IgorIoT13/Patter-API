@@ -1,6 +1,7 @@
 from app.dao import DeviceDao, DeviceDao
 from app.models import Device, Device
-from . import DeviceDataService, BrockerService
+from .device_data_service import DeviceDataService
+from .brocker_service import BrockerService
 
 class DeviceService:
     @staticmethod
@@ -86,7 +87,7 @@ class DeviceService:
             for d in data:
                 DeviceDataService.delete(d.id)
                 
-        brocker = BrockerService.get_all_by_property(device_id=device_id)
+        brocker = BrockerService.get_all_by_property(id_device=device_id)
         if brocker is not None:
             for b in brocker:
                 BrockerService.delete(b.id)

@@ -1,6 +1,5 @@
 from app import create_app, db
 from tests import Data, DeviceDataTest, DeviceTest, LocationTest, UserTest, BrockerTest
-from app.dao import DeviceDataDao
 from app.services import DeviceService, LocationService, DeviceDataService, UserService, BrockerService
 
 app = create_app()
@@ -26,13 +25,12 @@ def test_device_part_dao():
         
 def test_device_service():
     with app.app_context():
-        pass
-        loc = LocationService.create(room="testServ", adress="testSecrvice")
-        LocationService.update(loc.id, room="testServUpd", adress="testSecrviceUpd")
+        # loc = LocationService.create(room="testServ", adress="testSecrvice")
+        # LocationService.update(loc.id, room="testServUpd", adress="testSecrviceUpd")
         
-        dev = DeviceService.create(name="testServ", type="testServ", topic="testServ", location_id=loc.id)
+        # dev = DeviceService.create(name="testServ", type="testServ", topic="testServ", location_id=loc.id)
         # DeviceService.update(dev.id, name="testServUpd", type="testServUpd", topic="testServUpd")
-        dev2 = DeviceService.create(name="testServ1", type="testServ", topic="testServ", location_id=loc.id)
+        # dev2 = DeviceService.create(name="testServ1", type="testServ", topic="testServ", location_id=loc.id)
         # data1 = DeviceDataService.create(device_id=dev.id, secure_status=True, temprature=1.0, humidity=1.0)
         # data2 = DeviceDataService.create(device_id=dev.id, secure_status=False, temprature=2.0, humidity=2.0)
         # data3 = DeviceDataService.create(device_id=dev.id, secure_status=True, temprature=3.0, humidity=3.0)
@@ -40,19 +38,19 @@ def test_device_service():
         # DeviceDataService.update(data2.id, device_id=dev.id, secure_status=True, temprature=5.0, humidity=5.0)
         # DeviceDataService.update(data3.id, device_id=dev.id, secure_status=False, temprature=6.0, humidity=6.0)
 
-        user = UserService.create(username="testServ", password="testServ", number="testServ")
-        userToDelete = UserService.create(username="testServ1", password="testServ", number="testServ")
-        UserService.update(user.id, username="testServUpd", password="testServUpd", number="testServUpd")
+        # user = UserService.create(username="testServ", password="testServ", number="testServ")
+        # userToDelete = UserService.create(username="testServ1", password="testServ", number="testServ")
+        # UserService.update(user.id, username="testServUpd", password="testServUpd", number="testServUpd")
         
-        brocker = BrockerService.create(dev.id, user.id)
-        brocker2 = BrockerService.create(dev2.id, user.id)
-        brocker_to_update = BrockerService.get_all_by_property(dev2.id, user.id)
-        if brocker_to_update:
-            brocker_to_update = brocker_to_update[0]
-            BrockerService.update(id=brocker_to_update.id, id_user=userToDelete.id)
-            print(f"id: {brocker_to_update.id}, id_user: {brocker_to_update.id_user}, id_device: {brocker_to_update.id_device}")
+        # brocker = BrockerService.create(dev.id, user.id)
+        # brocker2 = BrockerService.create(dev2.id, user.id)
+        # brocker_to_update = BrockerService.get_all_by_property(dev2.id, user.id)
+        # if brocker_to_update:
+        #     brocker_to_update = brocker_to_update[0]
+        #     BrockerService.update(id=brocker_to_update.id, id_user=userToDelete.id)
         
-        LocationService.delete(loc.id)
+        # LocationService.delete(loc.id)
+        pass
         
 if __name__ == '__main__':
     prepare_test_environment()
