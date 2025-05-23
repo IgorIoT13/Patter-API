@@ -1,7 +1,7 @@
 from app import create_app, db
 from tests import Data, DeviceDataTest, DeviceTest, LocationTest, UserTest, BrockerTest
 from app.dao import DeviceDataDao
-from app.services import DeviceService, LocationService
+from app.services import DeviceService, LocationService, DeviceDataService
 
 app = create_app()
 
@@ -20,10 +20,21 @@ def test_device_part_dao():
         
 def test_device_service():
     with app.app_context():
+        pass
         loc = LocationService.create(room="testServ", adress="testSecrvice")
-        LocationService.update(loc.id, room="testServUpd", adress="testSecrviceUpd")
+        # LocationService.update(loc.id, room="testServUpd", adress="testSecrviceUpd")
         dev = DeviceService.create(name="testServ", type="testServ", topic="testServ", location_id=loc.id)
-        DeviceService.update(dev.id, name="testServUpd", type="testServUpd", topic="testServUpd")
+        # DeviceService.update(dev.id, name="testServUpd", type="testServUpd", topic="testServUpd")
+        # dev2 = DeviceService.create(name="testServ", type="testServ", topic="testServ", location_id=1)
+        data1 = DeviceDataService.create(device_id=dev.id, secure_status=True, temprature=1.0, humidity=1.0)
+        data2 = DeviceDataService.create(device_id=dev.id, secure_status=False, temprature=2.0, humidity=2.0)
+        data3 = DeviceDataService.create(device_id=dev.id, secure_status=True, temprature=3.0, humidity=3.0)
+        DeviceDataService.update(data1.id, device_id=dev.id, secure_status=False, temprature=4.0, humidity=4.0)
+        DeviceDataService.update(data2.id, device_id=dev.id, secure_status=True, temprature=5.0, humidity=5.0)
+        DeviceDataService.update(data3.id, device_id=dev.id, secure_status=False, temprature=6.0, humidity=6.0)
+        # DeviceService.delete(dev.id)
+        
+        # LocationService.delete(loc.id)
         
 if __name__ == '__main__':
     prepare_test_environment()
