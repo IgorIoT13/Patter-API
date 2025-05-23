@@ -1,7 +1,7 @@
 from app import create_app, db
 from tests import Data, DeviceDataTest, DeviceTest, LocationTest, UserTest, BrockerTest
 from app.dao import DeviceDataDao
-from app.services import DeviceService, LocationService, DeviceDataService
+from app.services import DeviceService, LocationService, DeviceDataService, UserService
 
 app = create_app()
 
@@ -33,6 +33,18 @@ def test_device_service():
         DeviceDataService.update(data2.id, device_id=dev.id, secure_status=True, temprature=5.0, humidity=5.0)
         DeviceDataService.update(data3.id, device_id=dev.id, secure_status=False, temprature=6.0, humidity=6.0)
         # DeviceService.delete(dev.id)
+        
+        # try:
+        user = UserService.create(username="testServ", password="testServ", number="testServ")
+        userToDelete = UserService.create(username="testServ1", password="testServ", number="testServ")
+        # except ValueError as e:
+        #     print(f"User creation failed: {e}")
+            
+        UserService.update(user.id, username="testServUpd", password="testServUpd", number="testServUpd")
+        UserService.delete(userToDelete.id)
+            
+
+        
         
         # LocationService.delete(loc.id)
         

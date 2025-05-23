@@ -35,6 +35,7 @@ class UserService:
             raise ValueError("User with this username or number already exists")
         
         user = UserDao.create(username=username, password=password, number=number)
+        return user
         
     @staticmethod
     def update(user_id: int, username: str = None, password: str = None, number: str = None) -> None:
@@ -47,9 +48,9 @@ class UserService:
         
         user = UserService.get_by_id(user_id)
         
-        ready_user_name = user.username if username is not None else user.username
-        ready_user_password = user.password if password is not None else user.password
-        ready_user_number = user.number if number is not None else user.number
+        ready_user_name = username if username is not None else user.username
+        ready_user_password = password if password is not None else user.password
+        ready_user_number = number if number is not None else user.number
         
         if UserService.get_by_property(username=ready_user_name, number=ready_user_number):
             raise ValueError("User with this username or number already exists")
