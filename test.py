@@ -51,8 +51,6 @@ def test_device_service():
             brocker_to_update = brocker_to_update[0]
             BrockerService.update(id=brocker_to_update.id, id_user=userToDelete.id)
             print(f"id: {brocker_to_update.id}, id_user: {brocker_to_update.id_user}, id_device: {brocker_to_update.id_device}")
-
-        
         
         LocationService.delete(loc.id)
         

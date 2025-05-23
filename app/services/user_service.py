@@ -1,5 +1,6 @@
 from app.models import User
 from app.dao import UserDao
+from . import BrockerService
 
 class UserService:
     
@@ -68,6 +69,10 @@ class UserService:
         if not data:
             raise ValueError("User with this ID does not exist")
         
-        # Check if the user exists
+        brockers = BrockerService.get_by_property(user_id=user_id)
+        if brockers:
+            for brocker in brockers:
+                BrockerService.delete(brocker.id)
+                
         UserDao.delete(user_id)
         
