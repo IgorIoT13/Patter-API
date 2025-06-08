@@ -1,6 +1,7 @@
 from app import create_app, db
 from tests import Data, DeviceDataTest, DeviceTest, LocationTest, UserTest, BrockerTest
 from app.services import DeviceService, LocationService, DeviceDataService, UserService, BrockerService
+# import pymysql
 
 app = create_app()
 
@@ -27,6 +28,15 @@ def test_device_service():
     with app.app_context():
         # loc = LocationService.create(room="testServ", adress="testSecrvice")
         # LocationService.update(loc.id, room="testServUpd", adress="testSecrviceUpd")
+        
+        LocationService.create(room="testServ", adress="testServ")
+        LocationService.create(room="testServ1", adress="testServ3")
+        loc = LocationService.get_by_property(room="testServ1")
+        LocationService.update(loc.id, room="testServUpd", adress="testServUpd")
+        loc = LocationService.get_by_property(adress="testServUpd")
+        LocationService.update(-1)
+        LocationService.get_by_property()
+        
         
         # dev = DeviceService.create(name="testServ", type="testServ", topic="testServ", location_id=loc.id)
         # DeviceService.update(dev.id, name="testServUpd", type="testServUpd", topic="testServUpd")

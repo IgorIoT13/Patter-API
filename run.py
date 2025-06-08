@@ -1,4 +1,6 @@
 from app import create_app, db
+import pymysql
+print("pymysql imported")
 
 app = create_app()
 

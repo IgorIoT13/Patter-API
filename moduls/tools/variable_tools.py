@@ -17,18 +17,18 @@ class VariableTools:
     @staticmethod
     def check_id(id: int, name: str = "") -> None:
         if id is None:
-            raise ValueError(f"{name} id cannot be None")
+            raise ValueError(f"{name} {VariableConst.EXEPTIONS_TEXT['ID_NONE']}")
         if id <= 0:
-            raise ValueError(f"{name} ID must be a positive integer")
+            raise ValueError(f"{name} {VariableConst.EXEPTIONS_TEXT['ID_NEGATIVE']}")
     
     @staticmethod
     def no_one_can_be_none(*args) -> None:
         for arg in args:
             if arg in VariableConst.EMPTY_STRING_OPTION:
-                raise ValueError("None value is not allowed")
+                raise ValueError(f"{VariableConst.EXEPTIONS_TEXT['NO_ONE_CAN_BE_NONE']}: {arg} cannot be None")
     
     @staticmethod
     def one_can_be_not_none(*args) -> None:
         if all(arg in VariableConst.EMPTY_STRING_OPTION for arg in args):
-            raise ValueError("At least one field must be not None")
+            raise ValueError(f"{VariableConst.EXEPTIONS_TEXT['ONE_CAN_BE_NOT_NONE']}")
 
