@@ -8,6 +8,7 @@ class VariableTools:
             return previous
         return current
     
+    @staticmethod
     def check_not_empty_str(input: str) -> bool:
         if input in VariableConst.EMPTY_STRING_OPTION:
             return False
@@ -16,9 +17,9 @@ class VariableTools:
     @staticmethod
     def check_id(id: int, name: str = "") -> None:
         if id is None:
-            raise ValueError("{name} id cannot be None")
+            raise ValueError(f"{name} id cannot be None")
         if id <= 0:
-            raise ValueError("{name} ID must be a positive integer")
+            raise ValueError(f"{name} ID must be a positive integer")
     
     @staticmethod
     def no_one_can_be_none(*args) -> None:
@@ -30,3 +31,4 @@ class VariableTools:
     def one_can_be_not_none(*args) -> None:
         if all(arg in VariableConst.EMPTY_STRING_OPTION for arg in args):
             raise ValueError("At least one field must be not None")
+
