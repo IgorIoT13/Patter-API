@@ -1,6 +1,7 @@
 from app.dao import LocationDao, DeviceDao
 from .device_service import DeviceService
 from app.models import Location
+from moduls.tools import VariableTools
 
 class LocationService:
     
@@ -10,20 +11,27 @@ class LocationService:
     
     @staticmethod
     def get_by_id(location_id: int) -> Location:
+        VariableTools.check_id(location_id, "Location")
         location = LocationDao.get_by_id(location_id)
         return location 
     
     @staticmethod
     def get_by_property(room: str = None, adress: str = None) -> Location:
-        location = LocationDao.get_by_property(room, adress)
+        VariableTools.one_can_be_not_none(room, adress)
+        if VariableTools.check_not_empty_str(room) and VariableTools.check_not_empty_str(adress):
+            location = LocationDao.get_by_property(room, adress)
+        elif VariableTools.check_not_empty_str(room):
+            location = LocationDao.get_by_room(room)
+        elif VariableTools.check_not_empty_str(adress):
+            location = LocationDao.get_by_adress(adress)
+        else:
+            location = None
         return location
     
     @staticmethod
     def update(location_id: int, room: str = None, adress: str = None) -> None:
-        if location_id is None:
-            raise ValueError("Location ID cannot be None")
-        if location_id <= 0:
-            raise ValueError("Location ID must be a positive integer")
+        VariableTools.check_id(location_id, "Location")
+        VariableTools.one_can_be_not_none(room, adress)
         
         location = LocationDao.get_by_id(location_id)
         
@@ -31,36 +39,30 @@ class LocationService:
             raise ValueError("Location not found")
         if room == location.room and adress == location.adress:
             raise ValueError("No changes detected")
-        if room is None and adress is None:
-            raise ValueError("Room and address cannot be None")
-        if room == "" or room == " " or adress == "" or adress == " ":
-            raise ValueError("Room and address cannot be empty")
+        
+        room = VariableTools.compare_to_empty_str(room, location.room)
+        adress = VariableTools.compare_to_empty_str(adress, location.adress)
+        
         if LocationDao.get_by_property(room, adress):
             raise ValueError("Location already exists")
-        if room is not None and adress is not None:
-            LocationDao.update(location_id, room, adress)
-        elif room is not None:
-            LocationDao.update(location_id, room, location.adress)
-        elif adress is not None:
-            LocationDao.update(location_id, location.room, adress)
+        
+        LocationDao.update(location_id, room, adress)
+
             
     @staticmethod
     def create(room: str = None, adress: str = None) -> Location:
-        if room is None or adress is None:
-            raise ValueError("Room and address cannot be None")
+        
+        VariableTools.one_can_be_not_none(room, adress)
+        room = VariableTools.compare_to_empty_str(room, "N/A")
+        adress = VariableTools.compare_to_empty_str(adress, "N/A")
+        
         if LocationDao.get_by_property(room, adress):
             raise ValueError("Location already exists")
         return LocationDao.create(room, adress)
     
     @staticmethod
-    def delete(location_id: int, location: Location = None) -> None:
-        id = location_id
-        if location is not None:
-            id = location.id
-        elif location_id is None:
-            raise ValueError("Location ID cannot be None")
-        elif location_id <= 0:
-            raise ValueError("Location ID must be a positive integer")
+    def delete(location_id: int) -> None:
+        VariableTools.check_id(location_id, "Location")
         
         location = LocationDao.get_by_id(location_id)
         if location is None:
@@ -71,12 +73,11 @@ class LocationService:
             for device in devices:
                 DeviceService.delete(device.id)
         LocationDao.delete(location_id)
-        
-        
-        
-        
-        
-        
-        
-        
-    
+
+
+
+
+
+
+
+
