@@ -34,6 +34,16 @@ class LocationDao:
     def get_by_property(room: str, adress: str) -> Location:
         location = Location.query.filter_by(room=room, adress=adress).first()
         return location
+    
+    @staticmethod
+    def get_by_room(room: str) -> Location:
+        location = Location.query.filter_by(room=room).first()
+        return location
+    
+    @staticmethod
+    def get_by_adress(adress: str) -> Location:
+        location = Location.query.filter_by(adress=adress).first()
+        return location
         
 
     @staticmethod
