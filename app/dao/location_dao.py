@@ -29,6 +29,8 @@ class LocationDao:
     @staticmethod
     def update(location_id: int, room: str, adress: str) -> Location:
         location = LocationDao.get_by_id(location_id)
+        location.room = room
+        location.adress = adress
         db.session.commit()
         return location
     

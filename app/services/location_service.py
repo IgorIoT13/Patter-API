@@ -47,8 +47,11 @@ class LocationService:
             raise ValueError("No changes detected")
         
         room = VariableTools.compare_to_empty_str(location.room, room)
+        print(f"Room: {room}")
         adress = VariableTools.compare_to_empty_str(location.adress, adress)
+        print(f"Adress: {adress}")
         loc_cur = LocationService.get_by_property(room, adress)
+        
         if loc_cur is not None and loc_cur.id != location_id:
             raise ValueError("Location already exists")
         
@@ -75,7 +78,7 @@ class LocationService:
         if location is None:
             raise ValueError("Location not found")
         
-        devices = DeviceService.get_by_property(location_id, all=True)
+        devices = DeviceService.get_by_property(location_id=location_id, all=True)
         if len(devices) > 0:
             for device in devices:
                 DeviceService.delete(device.id)
