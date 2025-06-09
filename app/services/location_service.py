@@ -2,19 +2,24 @@ from app.dao import LocationDao, DeviceDao
 from .device_service import DeviceService
 from app.models import Location
 from moduls.tools import VariableTools
+from moduls.tools import log_def, LogerHelper
 
 class LocationService:
+    __name__ = "LocationService"
     
+    @log_def(obj_name=__name__) 
     @staticmethod
     def get_all() -> list:
         return LocationDao.get_all()
     
+    @log_def(obj_name=__name__) 
     @staticmethod
     def get_by_id(location_id: int) -> Location:
         VariableTools.check_id(location_id, "Location")
         location = LocationDao.get_by_id(location_id)
         return location 
     
+    @log_def(obj_name=__name__) 
     @staticmethod
     def get_by_property(room: str = None, adress: str = None) -> Location:
         VariableTools.one_can_be_not_none(room, adress)
@@ -28,6 +33,7 @@ class LocationService:
             location = None
         return location
     
+    @log_def(obj_name=__name__) 
     @staticmethod
     def update(location_id: int, room: str = None, adress: str = None) -> None:
         VariableTools.check_id(location_id, "Location")
@@ -42,13 +48,13 @@ class LocationService:
         
         room = VariableTools.compare_to_empty_str(room, location.room)
         adress = VariableTools.compare_to_empty_str(adress, location.adress)
-        
-        if LocationDao.get_by_property(room, adress):
+        loc_cur = LocationService.get_by_property(room, adress)
+        if loc_cur is not None and loc_cur.id != location_id:
             raise ValueError("Location already exists")
         
         LocationDao.update(location_id, room, adress)
-
             
+    @log_def(obj_name=__name__) 
     @staticmethod
     def create(room: str = None, adress: str = None) -> Location:
         
@@ -60,6 +66,7 @@ class LocationService:
             raise ValueError("Location already exists")
         return LocationDao.create(room, adress)
     
+    @log_def(obj_name=__name__) 
     @staticmethod
     def delete(location_id: int) -> None:
         VariableTools.check_id(location_id, "Location")

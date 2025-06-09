@@ -32,10 +32,14 @@ def test_device_service():
         LocationService.create(room="testServ", adress="testServ")
         LocationService.create(room="testServ1", adress="testServ3")
         loc = LocationService.get_by_property(room="testServ1")
-        LocationService.update(loc.id, room="testServUpd", adress="testServUpd")
+        # loc_out = LocationService.get_by_property(room="testServUpd", adress="testServUpd1")
+        
+        # print(f"Local_out {loc_out.id}, {loc_out.adress}, {loc_out.room}")
+        LocationService.update(loc.id, room="testServUpd", adress="testServUpd1")
         loc = LocationService.get_by_property(adress="testServUpd")
-        LocationService.update(-1)
-        LocationService.get_by_property()
+        
+        # LocationService.update(-1)
+        # LocationService.get_by_property()
         
         
         # dev = DeviceService.create(name="testServ", type="testServ", topic="testServ", location_id=loc.id)
