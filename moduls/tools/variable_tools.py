@@ -34,7 +34,7 @@ class VariableTools:
                 raise ValueError(f"{VariableConst.EXEPTIONS_TEXT['NO_ONE_CAN_BE_NONE']}")
     
     @staticmethod
-    def least_must_be_not_none(*args) -> None:
+    def least_must_be_not_none_float(*args) -> None:
         if all(arg in VariableConst.EMPTY_STRING_OPTION for arg in args):
             raise ValueError(f"{VariableConst.EXEPTIONS_TEXT['NO_ONE_CAN_BE_NONE']}")
     
