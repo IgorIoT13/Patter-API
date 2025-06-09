@@ -164,14 +164,3 @@ class DeviceService:
                 BrockerService.delete(b.id)
         
         DeviceDao.delete(device_id)
-    
-    # @log_def(obj_name=__name__)
-    # @staticmethod
-    # def get_by_location(location_id: int) -> list:
-    #     VariableTools.check_id(location_id, "Device")
-    #     devices = DeviceDao.get_all()
-        
-    #     for device in devices:
-    #         if device.location_id != location_id:
-    #             devices.remove(device)
-    #     return devices
