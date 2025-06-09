@@ -2,6 +2,7 @@ class VariableConst:
     
     EMPTY_STRING_OPTION = ["", "None", "none", "N/A", "n/a", "null", "NULL", " ", None]
     EMPTY_FLOAT_OPTION = [-999.0, None]
+    EMPTY_INT = None
     
     EXEPTIONS_TEXT = {
         'ID_NONE': "ID cannot be None",
