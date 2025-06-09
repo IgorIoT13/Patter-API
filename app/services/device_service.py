@@ -2,22 +2,29 @@ from app.dao import DeviceDao, DeviceDao
 from app.models import Device, Device
 from .device_data_service import DeviceDataService
 from .brocker_service import BrockerService
+from moduls.tools import log_def
 
 class DeviceService:
+    __name__ = "DeviceService"
+    
+    @log_def(obj_name=__name__)
     @staticmethod
     def get_all() -> list:
         return DeviceDao.get_all()
 
+    @log_def(obj_name=__name__)
     @staticmethod
     def get_by_id(device_id: int) -> Device:
         device = DeviceDao.get_by_id(device_id)
         return device
     
+    @log_def(obj_name=__name__)
     @staticmethod
     def get_by_property(name: str = None, type: str = None, topic: str = None) -> Device:
         device = DeviceDao.get_by_property(name, type, topic)
         return device
 
+    @log_def(obj_name=__name__)
     @staticmethod
     def create(name: str, type: str, topic: str, location_id: int) -> Device:
         if name is None or type is None or topic is None or location_id is None:
@@ -26,6 +33,7 @@ class DeviceService:
             raise ValueError("Device already exists")
         return DeviceDao.create(name, type, topic, location_id)
 
+    @log_def(obj_name=__name__)
     @staticmethod
     def update(
         device_id: int,
@@ -66,7 +74,7 @@ class DeviceService:
         if name is not None and type is not None and topic is not None:
             DeviceDao.update(device_id, ready_name, ready_type, ready_topic, ready_location_id)
 
-            
+    @log_def(obj_name=__name__)
     @staticmethod
     def delete(device_id: int, device: Device = None) -> None:
         id = device_id
@@ -94,6 +102,7 @@ class DeviceService:
         
         DeviceDao.delete(device_id)
     
+    @log_def(obj_name=__name__)
     @staticmethod
     def get_by_location(location_id: int) -> list:
         if location_id is None:
