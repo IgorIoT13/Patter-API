@@ -46,8 +46,8 @@ class LocationService:
         if room == location.room and adress == location.adress:
             raise ValueError("No changes detected")
         
-        room = VariableTools.compare_to_empty_str(room, location.room)
-        adress = VariableTools.compare_to_empty_str(adress, location.adress)
+        room = VariableTools.compare_to_empty_str(location.room, room)
+        adress = VariableTools.compare_to_empty_str(location.adress, adress)
         loc_cur = LocationService.get_by_property(room, adress)
         if loc_cur is not None and loc_cur.id != location_id:
             raise ValueError("Location already exists")
