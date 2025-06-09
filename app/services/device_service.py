@@ -2,7 +2,7 @@ from app.dao import DeviceDao, DeviceDao
 from app.models import Device, Device
 from .device_data_service import DeviceDataService
 from .brocker_service import BrockerService
-from moduls.tools import log_def
+from moduls.tools import log_def, VariableTools
 
 class DeviceService:
     __name__ = "DeviceService"
@@ -15,14 +15,51 @@ class DeviceService:
     @log_def(obj_name=__name__)
     @staticmethod
     def get_by_id(device_id: int) -> Device:
+        VariableTools.check_id(device_id)
         device = DeviceDao.get_by_id(device_id)
         return device
     
     @log_def(obj_name=__name__)
     @staticmethod
-    def get_by_property(name: str = None, type: str = None, topic: str = None) -> Device:
-        device = DeviceDao.get_by_property(name, type, topic)
-        return device
+    def get_by_property(name: str = None, type: str = None, topic: str = None, location_id: int = None) -> Device:
+        VariableTools.one_can_be_not_none(name, type, topic, location_id)
+        name_status = VariableTools.check_not_empty_str(name)
+        type_status = VariableTools.check_not_empty_str(type)
+        topic_status = VariableTools.check_not_empty_str(topic)
+        location_id_status = location_id is not None
+        if location_id_status:
+            VariableTools.check_id(location_id)
+
+        if name_status and type_status and topic_status and location_id_status:
+            return DeviceDao.get_by_property(name, type, topic, location_id)
+        elif not name_status and type_status and topic_status and location_id_status:
+            return DeviceDao.get_by_property_without_name(type, topic, location_id)
+        elif name_status and not type_status and topic_status and location_id_status:
+            return DeviceDao.get_by_property_without_type(name, topic, location_id)
+        elif name_status and type_status and not topic_status and location_id_status:
+            return DeviceDao.get_by_property_without_topic(name, type, location_id)
+        elif name_status and type_status and topic_status and not location_id_status:
+            return DeviceDao.get_by_property_without_location(name, type, topic)
+        elif name_status and type_status and not topic_status and not location_id_status:
+            return DeviceDao.get_by_name_and_type(name, type)
+        elif name_status and not type_status and topic_status and not location_id_status:
+            return DeviceDao.get_by_name_and_topic(name, topic)
+        elif not name_status and type_status and topic_status and not location_id_status:
+            return DeviceDao.get_by_type_and_topic(type, topic)
+        elif name_status and not type_status and not topic_status and location_id_status:
+            return DeviceDao.get_by_name_and_location(name, location_id)
+        elif not name_status and type_status and not topic_status and location_id_status:
+            return DeviceDao.get_by_type_and_location(type, location_id)
+        elif not name_status and not type_status and topic_status and location_id_status:
+            return DeviceDao.get_by_topic_and_location(topic, location_id)
+        elif name_status and not type_status and not topic_status and not location_id_status:
+            return DeviceDao.get_by_name(name)
+        elif not name_status and type_status and not topic_status and not location_id_status:
+            return DeviceDao.get_by_type(type)
+        elif not name_status and not type_status and topic_status and not location_id_status:
+            return DeviceDao.get_by_topic(topic)
+        else:
+            return None
 
     @log_def(obj_name=__name__)
     @staticmethod
@@ -116,4 +153,3 @@ class DeviceService:
             if device.location_id != location_id:
                 devices.remove(device)
         return devices
-        
