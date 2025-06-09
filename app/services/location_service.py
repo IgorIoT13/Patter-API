@@ -75,7 +75,7 @@ class LocationService:
         if location is None:
             raise ValueError("Location not found")
         
-        devices = DeviceService.get_by_location(location_id)
+        devices = DeviceService.get_by_property(location_id, all=True)
         if len(devices) > 0:
             for device in devices:
                 DeviceService.delete(device.id)
