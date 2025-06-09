@@ -199,6 +199,18 @@ class DeviceDao:
     def get_all_by_topic(topic: str) -> list:
         device = Device.query.filter_by(topic=topic).all()
         return device
+    
+    @log_def(obj_name=__name__) 
+    @staticmethod
+    def get_by_location(location_id: int) -> Device:
+        device = Device.query.filter_by(location_id=location_id).first()
+        return device
+    
+    @log_def(obj_name=__name__) 
+    @staticmethod
+    def get_all_by_location(location_id: int) -> list:
+        device = Device.query.filter_by(location_id=location_id).all()
+        return device
     #################################################################################
     
     @log_def(obj_name=__name__) 

@@ -99,7 +99,12 @@ class DeviceService:
             if all:
                 data = DeviceDao.get_all_by_topic(topic)
             else:
-                data = DeviceDao.get_by_topic(topic)
+                data = DeviceDao.get_by_topic(topic)   
+        elif not name_status and not type_status and not topic_status and location_id_status:
+            if all:
+                data = DeviceDao.get_all_by_location(location_id)
+            else:
+                data = DeviceDao.get_by_location(location_id)
         else:
             return None
         return data
