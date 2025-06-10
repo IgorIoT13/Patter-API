@@ -2,6 +2,12 @@ from app import create_app, db
 from tests import Data, DeviceDataTest, DeviceTest, LocationTest, UserTest, BrockerTest
 from app.services import DeviceService, LocationService, DeviceDataService, UserService, BrockerService
 
+from tests import SetupTables, URDTables
+# import pymysql
+
+import random
+import time
+
 app = create_app()
 
 with app.app_context():
@@ -23,34 +29,33 @@ def test_device_part_dao():
         BrockerTest.tests()
         UserTest.delete_test(id = Data.get_broker()["to_delete"]["user_id"])
         
+    
 def test_device_service():
     with app.app_context():
-        # loc = LocationService.create(room="testServ", adress="testSecrvice")
-        # LocationService.update(loc.id, room="testServUpd", adress="testSecrviceUpd")
+        SetupTables.Base_Location_Services()
+        locations = LocationService.get_all()
+        SetupTables.Base_Device_Services(locations)
+        devices = DeviceService.get_all()
+        SetupTables.Base_DeviceData_Services(devices)
+        SetupTables.Base_User_Services()
+        SetupTables.Base_Brocker_Services()
         
-        # dev = DeviceService.create(name="testServ", type="testServ", topic="testServ", location_id=loc.id)
-        # DeviceService.update(dev.id, name="testServUpd", type="testServUpd", topic="testServUpd")
-        # dev2 = DeviceService.create(name="testServ1", type="testServ", topic="testServ", location_id=loc.id)
-        # data1 = DeviceDataService.create(device_id=dev.id, secure_status=True, temprature=1.0, humidity=1.0)
-        # data2 = DeviceDataService.create(device_id=dev.id, secure_status=False, temprature=2.0, humidity=2.0)
-        # data3 = DeviceDataService.create(device_id=dev.id, secure_status=True, temprature=3.0, humidity=3.0)
-        # DeviceDataService.update(data1.id, device_id=dev.id, secure_status=False, temprature=4.0, humidity=4.0)
-        # DeviceDataService.update(data2.id, device_id=dev.id, secure_status=True, temprature=5.0, humidity=5.0)
-        # DeviceDataService.update(data3.id, device_id=dev.id, secure_status=False, temprature=6.0, humidity=6.0)
-
-        # user = UserService.create(username="testServ", password="testServ", number="testServ")
-        # userToDelete = UserService.create(username="testServ1", password="testServ", number="testServ")
-        # UserService.update(user.id, username="testServUpd", password="testServUpd", number="testServUpd")
+        # URDTables.Test_DeviceData_Services()
+        # URDTables.Test_User_Services()
+        URDTables.Test_Brocker_Services()
         
-        # brocker = BrockerService.create(dev.id, user.id)
-        # brocker2 = BrockerService.create(dev2.id, user.id)
-        # brocker_to_update = BrockerService.get_all_by_property(dev2.id, user.id)
-        # if brocker_to_update:
-        #     brocker_to_update = brocker_to_update[0]
-        #     BrockerService.update(id=brocker_to_update.id, id_user=userToDelete.id)
+        # # BaseLocationTablesServices()
+        # list_locations = LocationService.get_all()
+        # # BaseDeviceTablesServices(list_locations)
+        # list_devices = DeviceService.get_all()
+        # BaseDeviceDataTablesServices(list_devices)
         
-        # LocationService.delete(loc.id)
-        pass
+        
+        
+        # Device_test_service() 
+        # DeviceData_test_service()
+               
+        # pass
         
 if __name__ == '__main__':
     prepare_test_environment()

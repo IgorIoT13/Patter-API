@@ -23,13 +23,10 @@ class UserDao:
     ) -> User:
         user = UserDao.get_by_id(user_id)
         
-        if username is not None:
-            user.username = username
-        if password is not None:
-            user.password = password
-        if number is not None:
-            user.number = number
-        
+        user.username = username
+        user.password = password
+        user.number = number
+    
         db.session.commit()
         return user
     

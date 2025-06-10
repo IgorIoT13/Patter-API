@@ -1,36 +1,50 @@
 from app.models import Brocker
-from app.dao import BrockerDao, UserDao, DeviceDao
+from app.dao import BrockerDao, UserDao, DeviceDao, LocationDao, DeviceDataDao
+from moduls.tools import log_def, VariableTools
 # from .user_service import UserService
 # from .device_service import DeviceService
 
 class BrockerService:
+    __name__ = "BrockerService"
     
+    @log_def(obj_name=__name__)
     @staticmethod
     def create(id_device: int, id_user: int) -> Brocker:
+        VariableTools.check_id(id_device, "Device")
+        VariableTools.check_id(id_user, "User")
+        user = UserDao.get_by_id(id_user)
         device = DeviceDao.get_by_id(id_device)
+        
         if not device:
             raise ValueError(f"Device with id {id_device} does not exist.")
-        
-        user = UserDao.get_by_id(id_user)
         if not user:
             raise ValueError(f"User with id {id_user} does not exist.")
         
         brocker = BrockerDao.create(id_device, id_user)
         return brocker
     
+    @log_def(obj_name=__name__)
     @staticmethod
     def get_all() -> list[Brocker]:
         return BrockerDao.get_all()
     
+    @log_def(obj_name=__name__)
     @staticmethod
     def get_by_id(id: int) -> Brocker:
+        VariableTools.check_id(id, "Brocker")
         return BrockerDao.get_by_id(id)
     
+    @log_def(obj_name=__name__)
     @staticmethod
-    def get_all_by_property(id_device: int = None, id_user: int = None) -> list:
+    def get_by_property(id_device: int = None, id_user: int = None) -> Brocker:
+        return BrockerDao.get_by_property(id_device, id_user)
+    
+    @log_def(obj_name=__name__)
+    @staticmethod
+    def get_all_by_property(id_device: int = None, id_user: int = None) -> (Brocker | list | None):
         data = BrockerDao.get_all()
         if id_device is not None and id_user is not None:
-            return [item for item in data if item.id_device == id_device and item.id_user == id_user]
+            return BrockerDao.get_by_property(id_device, id_user)
         elif id_device is not None:
             return [item for item in data if item.id_device == id_device]
         elif id_user is not None:
@@ -38,38 +52,82 @@ class BrockerService:
         else:
             return data
     
+    @log_def(obj_name=__name__)
     @staticmethod
     def update(id: int, id_device: int = None, id_user: int = None) -> None:
-        if id is None:
-            raise ValueError("ID cannot be None.")
-        elif id <= 0:
-            raise ValueError("ID must be a positive integer.")
+        VariableTools.check_id(id, "Brocker")
         
         brocker = BrockerDao.get_by_id(id)
+        id_device = VariableTools.compare_to_empty_int(brocker.id_device, id_device)
+        id_user = VariableTools.compare_to_empty_int(brocker.id_user, id_user)
+        
+        user = UserDao.get_by_id(id_user)
+        device = DeviceDao.get_by_id(id_device)
+        
         if not brocker:
             raise ValueError(f"Brocker with id {id} does not exist.")
-        
-        ready_id_device = id_device if id_device is not None else brocker.id_device
-        ready_id_user = id_user if id_user is not None else brocker.id_user
-        
-        device = DeviceDao.get_by_id(ready_id_device)
         if not device:
-            raise ValueError(f"Device with id {ready_id_device} does not exist.")
-        user = UserDao.get_by_id(ready_id_user)
+            raise ValueError(f"Device with id {id_device} does not exist.")
         if not user:
-            raise ValueError(f"User with id {ready_id_user} does not exist.")
+            raise ValueError(f"User with id {id_user} does not exist.")
         
-        brocker = BrockerDao.update(id, ready_id_device, ready_id_user)
+        brocker = BrockerDao.update(id, id_device, id_user)
     
+    @log_def(obj_name=__name__)
     @staticmethod
     def delete(id: int) -> None:
-        if id is None:
-            raise ValueError("ID cannot be None.")
-        elif id <= 0:
-            raise ValueError("ID must be a positive integer.")
-        
+        VariableTools.check_id(id, "Brocker")
         brocker = BrockerDao.get_by_id(id)
         if not brocker:
             raise ValueError(f"Brocker with id {id} does not exist.")
         
         BrockerDao.delete(id)
+        
+    ################################ BISNES LOGIC #####################################
+    
+    @log_def(obj_name=__name__)
+    @staticmethod
+    def get_all_data_in_location(location_id: int) -> list:
+        VariableTools.check_id(location_id, "Location")
+        location = LocationDao.get_by_id(location_id)
+        if not location:
+            raise ValueError(f"Location with id {location_id} does not exist.")
+        devices = DeviceDao.get_all_by_location(location_id=location_id)
+        result = []
+        if devices:
+            devices_id_list = [device.id for device in devices]
+            for id in devices_id_list:
+                data_device = [data for data in DeviceDataDao.get_all() if data.device_id == id]
+                if data_device:
+                    for data in data_device:
+                        result.append(data)
+        return result
+    
+    @log_def(obj_name=__name__)
+    @staticmethod
+    def get_device_in_location(location_id: int) -> list:
+        VariableTools.check_id(location_id, "Location")
+        location = LocationDao.get_by_id(location_id)
+        if not location:
+            raise ValueError(f"Location with id {location_id} does not exist.")
+        devices = DeviceDao.get_all_by_location(location_id=location_id)
+        return devices
+    
+    @log_def(obj_name=__name__)
+    @staticmethod
+    def get_device_by_user(user_id: int) -> list:
+        VariableTools.check_id(user_id, "User")
+        user = UserDao.get_by_id(user_id)
+        if not user:
+            raise ValueError(f"User with id {user_id} does not exist.")
+        
+        brockers = BrockerDao.get_by_property(id_user=user_id)
+        devices = []
+        for brocker in brockers:
+            device = DeviceDao.get_by_id(brocker.id_device)
+            if device:
+                devices.append(device)
+        return devices
+    
+    
+        

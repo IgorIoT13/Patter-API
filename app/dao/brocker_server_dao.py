@@ -11,13 +11,13 @@ class BrockerDao:
         return Brocker.query.get(broker_server_id)
     
     @staticmethod
-    def get_by_property(id_device: int = None, id_user: int = None) -> Brocker:
+    def get_by_property(id_device: int = None, id_user: int = None) -> (Brocker | list | None):
         if id_device is not None and id_user is not None:
             broker_server = Brocker.query.filter_by(id_device=id_device, id_user=id_user).first()
         elif id_device is not None:
-            broker_server = Brocker.query.filter_by(id_device=id_device).first()
+            broker_server = Brocker.query.filter_by(id_device=id_device).all()
         elif id_user is not None:
-            broker_server = Brocker.query.filter_by(id_user=id_user).first()
+            broker_server = Brocker.query.filter_by(id_user=id_user).all()
         else:
             broker_server = None
             
@@ -26,15 +26,12 @@ class BrockerDao:
     @staticmethod
     def update(
         broker_server_id: int,
-        id_device: int = None,
-        id_user: int = None
+        id_device: int,
+        id_user: int
     ) -> Brocker:
         broker_server = BrockerDao.get_by_id(broker_server_id)
-        
-        if id_device is not None:
-            broker_server.id_device = id_device
-        if id_user is not None:
-            broker_server.id_user = id_user
+        broker_server.id_device = id_device
+        broker_server.id_user = id_user
             
         db.session.commit()
         return broker_server
