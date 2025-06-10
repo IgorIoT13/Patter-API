@@ -10,10 +10,12 @@ class UserActivity:
     def get_all_data_in_location(location_id: int) -> list:
         VariableTools.check_id(location_id, "Location")
         location = LocationService.get_by_id(location_id)
+        print(location.id)
         if not location:
             raise ValueError(f"Location with id {location_id} does not exist.")
         
-        devices = DeviceService.get_by_property(location_id, all=True)
+        devices = DeviceService.get_by_property(location_id=location_id, all=True)
+        print(devices)
         data = []
         for device in devices:
             device_data = DeviceDataService.get_all_by_device_id(device.id)
@@ -59,7 +61,7 @@ class UserActivity:
         if not location:
             raise ValueError(f"Location with id {location_id} does not exist.")
         
-        devices = DeviceService.get_by_property(location_id, all=True)
+        devices = DeviceService.get_by_property(location_id=location_id, all=True)
         data = {
             "temperature": 0.0,
             "humidity": 0.0,
@@ -75,6 +77,10 @@ class UserActivity:
                     data["temperature"] += data_point.temprature
                 if data_point.humidity >= -999:
                     data["humidity"] += data_point.humidity
+        if count == 0:
+            raise ValueError(f"No data found for location with id {location_id}.")
+        data["temperature"] /= count
+        data["humidity"] /= count
         return data
     
     @log_def(obj_name=__name__)
@@ -104,14 +110,6 @@ class UserActivity:
         with open(path, newline='', encoding='utf-8') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
-                # Приклад: припускаємо, що у CSV є такі колонки:
-                # user_username, user_password, user_number
-                # location_room, location_adress
-                # device_name, device_type, device_topic
-                # device_data_secure_status, device_data_temprature, device_data_humidity
-                # brocker_id_user, brocker_id_device
-
-                # Створення користувача
                 try:
                     user = UserService.create(
                         username=row['user_username'],
