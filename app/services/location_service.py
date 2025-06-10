@@ -82,7 +82,19 @@ class LocationService:
                 DeviceService.delete(device.id)
         LocationDao.delete(location_id)
 
-
+    @log_def(obj_name=__name__)
+    @staticmethod
+    def to_dict(id: int) -> dict:
+        VariableTools.check_id(id, "Location")
+        location = LocationService.get_by_id(id)
+        if location is None:
+            raise ValueError("Location not found")
+        
+        return {
+            "id": location.id,
+            "room": location.room,
+            "adress": location.adress
+        }
 
 
 

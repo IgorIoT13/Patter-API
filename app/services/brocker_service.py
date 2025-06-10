@@ -77,9 +77,23 @@ class BrockerService:
     @staticmethod
     def delete(id: int) -> None:
         VariableTools.check_id(id, "Brocker")
-        brocker = BrockerDao.get_by_id(id)
+        brocker = BrockerService.get_by_id(id)
         if not brocker:
             raise ValueError(f"Brocker with id {id} does not exist.")
         
         BrockerDao.delete(id)
+        
+    @log_def(obj_name=__name__)
+    @staticmethod
+    def to_dict(id: int) -> dict:
+        VariableTools.check_id(id, "Brocker")
+        brocker = BrockerDao.get_by_id(id)
+        if not brocker:
+            raise ValueError(f"Brocker with id {id} does not exist.")
+        
+        return {
+            "id": brocker.id,
+            "id_device": brocker.id_device,
+            "id_user": brocker.id_user
+        }
    
