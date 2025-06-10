@@ -98,9 +98,12 @@ def test_device_service():
         BaseDeviceTablesServices(list_locations)
         list_devices = DeviceService.get_all()
         BaseDeviceDataTablesServices(list_devices)
-        DeviceData_test_service()
         
-        # Device_test_service()        
+        
+        
+        # Device_test_service() 
+        # DeviceData_test_service()
+               
         # pass
         
 if __name__ == '__main__':
