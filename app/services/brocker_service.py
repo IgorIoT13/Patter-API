@@ -1,5 +1,5 @@
 from app.models import Brocker
-from app.dao import BrockerDao, UserDao, DeviceDao
+from app.dao import BrockerDao, UserDao, DeviceDao, LocationDao, DeviceDataDao
 from moduls.tools import log_def, VariableTools
 # from .user_service import UserService
 # from .device_service import DeviceService
@@ -41,10 +41,28 @@ class BrockerService:
     
     @log_def(obj_name=__name__)
     @staticmethod
-    def get_all_by_property(id_device: int = None, id_user: int = None) -> list:
+    def get_all_data_in_location(location_id: int) -> list:
+        VariableTools.check_id(location_id, "Location")
+        location = LocationDao.get_by_id(location_id)
+        if not location:
+            raise ValueError(f"Location with id {location_id} does not exist.")
+        devices = DeviceDao.get_all_by_location(location_id=location_id)
+        result = []
+        if devices:
+            devices_id_list = [device.id for device in devices]
+            for id in devices_id_list:
+                data_device = [data for data in DeviceDataDao.get_all() if data.device_id == id]
+                if data_device:
+                    for data in data_device:
+                        result.append(data)
+        return result
+    
+    @log_def(obj_name=__name__)
+    @staticmethod
+    def get_all_by_property(id_device: int = None, id_user: int = None) -> (Brocker | list | None):
         data = BrockerDao.get_all()
         if id_device is not None and id_user is not None:
-            return BrockerDao.get_all_by_property(id_device, id_user)
+            return BrockerDao.get_by_property(id_device, id_user)
         elif id_device is not None:
             return [item for item in data if item.id_device == id_device]
         elif id_user is not None:
