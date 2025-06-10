@@ -30,11 +30,6 @@ class BrockerDao:
         id_user: int = None
     ) -> Brocker:
         broker_server = BrockerDao.get_by_id(broker_server_id)
-        
-        if id_device is not None:
-            broker_server.id_device = id_device
-        if id_user is not None:
-            broker_server.id_user = id_user
             
         db.session.commit()
         return broker_server
