@@ -93,3 +93,16 @@ class UserService:
                 
         UserDao.delete(user_id)
         
+    @log_def(obj_name=__name__)
+    @staticmethod
+    def to_dict(id: int) -> dict:
+        VariableTools.check_id(id, "User")
+        user = UserService.get_by_id(id)
+        if not user:
+            raise ValueError("User with this ID does not exist")
+        
+        return {
+            "id": user.id,
+            "username": user.username,
+            "number": user.number
+        }

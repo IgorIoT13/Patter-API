@@ -81,4 +81,21 @@ class DeviceDataService:
             raise ValueError("Device data not found")
         
         DeviceDataDao.delete(device_data.id)
+        
+    @log_def(obj_name=__name__)
+    @staticmethod
+    def to_dict(id: int) -> dict:
+        VariableTools.check_id(id, "DeviceData")
+        device_data = DeviceDataService.get_by_id(id)
+        
+        if device_data is None:
+            raise ValueError("Device data not found")
+        
+        return {
+            "id": device_data.id,
+            "device_id": device_data.device_id,
+            "secure_status": device_data.secure_status,
+            "temprature": device_data.temprature,
+            "humidity": device_data.humidity
+        }
     

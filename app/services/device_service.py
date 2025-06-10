@@ -166,3 +166,19 @@ class DeviceService:
                 BrockerService.delete(b.id)
         
         DeviceDao.delete(device_id)
+        
+    @log_def(obj_name=__name__)
+    @staticmethod
+    def to_dict(id: int) -> dict:
+        VariableTools.check_id(id, "Device")
+        device = DeviceService.get_by_id(id)
+        if device is None:
+            raise ValueError("Device not found")
+        
+        return {
+            "id": device.id,
+            "name": device.name,
+            "type": device.type,
+            "topic": device.topic,
+            "location_id": device.location_id
+        }

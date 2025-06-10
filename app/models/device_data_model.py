@@ -12,4 +12,4 @@ class DeviceData(db.Model):
     time = db.Column(db.DateTime, nullable=False)
 
     def __repr__(self):
-        return f'<DeviceData {self.device_id} {self.timestamp} {self.value}>'
+        return f'<DeviceData {self.device_id} {self.time} {self.temprature}>'

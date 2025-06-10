@@ -3,10 +3,8 @@ from tests import Data, DeviceDataTest, DeviceTest, LocationTest, UserTest, Broc
 from app.services import DeviceService, LocationService, DeviceDataService, UserService, BrockerService
 
 from tests import SetupTables, URDTables
-# import pymysql
+from app.busineslogic import UserActivity
 
-import random
-import time
 
 app = create_app()
 
@@ -32,17 +30,20 @@ def test_device_part_dao():
     
 def test_device_service():
     with app.app_context():
-        SetupTables.Base_Location_Services()
-        locations = LocationService.get_all()
-        SetupTables.Base_Device_Services(locations)
-        devices = DeviceService.get_all()
-        SetupTables.Base_DeviceData_Services(devices)
-        SetupTables.Base_User_Services()
-        SetupTables.Base_Brocker_Services()
+        UserActivity.set_data_from_csv(
+            "C:\\WorkspaceFolder\\Learn\\Labs\\Pattern\\Patter-API\\test_data.csv"
+            )
+        # SetupTables.Base_Location_Services()
+        # locations = LocationService.get_all()
+        # SetupTables.Base_Device_Services(locations)
+        # devices = DeviceService.get_all()
+        # SetupTables.Base_DeviceData_Services(devices)
+        # SetupTables.Base_User_Services()
+        # SetupTables.Base_Brocker_Services()
         
         # URDTables.Test_DeviceData_Services()
         # URDTables.Test_User_Services()
-        URDTables.Test_Brocker_Services()
+        # URDTables.Test_Brocker_Services()
         
         # # BaseLocationTablesServices()
         # list_locations = LocationService.get_all()
@@ -58,7 +59,7 @@ def test_device_service():
         # pass
         
 if __name__ == '__main__':
-    prepare_test_environment()
+    # prepare_test_environment()
     test_device_service()
     # test_device_part_dao()
     
