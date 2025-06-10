@@ -56,6 +56,40 @@ def Device_test_service():
     DeviceService.update(cur_device.id, name="Garden Light Updated", location_id=cur_location.id)
     time.sleep(15)
     DeviceService.delete(cur_device.id)
+    
+def BaseDeviceDataTablesServices(device_list=None):
+    min = 1
+    max = len(device_list) if device_list else 1
+    
+    DeviceDataService.create(
+        random.randint(min, max), secure_status=True, 
+        temprature=random.uniform(0.4, 35.0), 
+        humidity=random.uniform(0.1, 99.9)
+    )
+    DeviceDataService.create(
+        random.randint(min, max), secure_status=False, 
+        humidity=random.uniform(0.1, 99.9)
+    )
+    DeviceDataService.create(
+        random.randint(min, max), secure_status=True, 
+        humidity=random.uniform(0.1, 99.9)
+    )
+    DeviceDataService.create(
+        random.randint(min, max), secure_status=False, 
+        temprature=random.uniform(0.4, 35.0),
+    )
+
+def DeviceData_test_service():
+    cur_device = DeviceDataService.get_by_id(2)
+    print(f"DeviceData: {cur_device.id}")
+    DeviceDataService.update(
+        cur_device.id, 
+        secure_status=True, 
+        temprature=100.0, 
+        humidity=-59
+    )
+    time.sleep(15)
+    DeviceDataService.delete(cur_device.id)
         
 def test_device_service():
     with app.app_context():
@@ -63,6 +97,8 @@ def test_device_service():
         list_locations = LocationService.get_all()
         BaseDeviceTablesServices(list_locations)
         list_devices = DeviceService.get_all()
+        BaseDeviceDataTablesServices(list_devices)
+        DeviceData_test_service()
         
         # Device_test_service()        
         # pass

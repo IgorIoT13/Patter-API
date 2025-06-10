@@ -33,8 +33,10 @@ class DeviceService:
             VariableTools.check_id(location_id)
 
         if name_status and type_status and topic_status and location_id_status:
-            
-            data = DeviceDao.get_by_property(name, type, topic, location_id)
+            if all:
+                data = DeviceDao.get_all_by_property(name, type, topic, location_id)
+            else:
+                data = DeviceDao.get_by_property(name, type, topic, location_id)
         elif not name_status and type_status and topic_status and location_id_status:
             if all:
                 data = DeviceDao.get_all_by_property_without_name(type, topic, location_id)

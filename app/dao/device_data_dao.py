@@ -39,8 +39,8 @@ class DeviceDataDao:
     def create(
         device_id: int,
         secure_status: bool = False,
-        temprature: float = 0,
-        humidity: float = 0
+        temprature: float = -999.0,
+        humidity: float = -999.0
     ) -> DeviceData:
         data = DeviceData(
             device_id=device_id,
