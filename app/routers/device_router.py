@@ -20,7 +20,7 @@ def create_device():
 @device_router.route('/devices/<int:device_id>', methods=['PUT'])
 def update_device(device_id):
     data = request.json
-    DeviceService.update(device_id, data.get('name'), data.get('type'), data.get('topic'), data.get('location_id'))
+    DeviceService.update(device_id, data['name'], data['type'], data['topic'], int(data['location_id']))
     return jsonify({'message': 'Device updated successfully'})
 
 @device_router.route('/devices/<int:device_id>', methods=['DELETE'])

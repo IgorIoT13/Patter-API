@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app.services import BrockerService, DeviceDataService, DeviceService
+from app.services import BrockerService, DeviceDataService, DeviceService, UserService
 from app.busineslogic import UserActivity
 
 brocker_router = Blueprint('brocker_router', __name__)
@@ -44,3 +44,22 @@ def get_device_by_user(user_id):
 def get_middle_data(location_id):
     data = UserActivity.get_middle_data_in_location(location_id)
     return jsonify(data)
+
+@brocker_router.route('/brockers/aut', methods=['PUT'])
+def get_aut():
+    data = request.json
+    status = UserActivity.autorize_user(username=data['username'], password=data['password'])
+    if not status:
+        return jsonify({'error': 'Authorization failed'}), 401
+    user = UserService.get_by_property(username=data['username'])[0]
+    result = {'id': user.id}
+    return jsonify(result)
+
+@brocker_router.route('/brockers/addDevice', methods=['PUT'])
+def add_device():
+    data = request.json
+    print(data['device_id'], data['user_id'])
+    status = BrockerService.create(id_user=data['user_id'], id_device=data['device_id'])
+    if not status:
+        return jsonify({'error': 'Failed to add device'}), 400
+    return jsonify({'message': 'Device added successfully'})
